@@ -31,6 +31,7 @@ g++ ./main.cpp -o ./main
 内置了前两张配料单的内容作为示例, 物料平衡计算误差均小于0.3%
 
 ```c
+// in main.cpp
   // 第一张配料单所使用的输入参数
   // string filename("input1.json"); //读取输入文件 -- 第一张
   // vector<string> ores_name = {"sinter", "aust", "pellet"}; // 使用的矿名
