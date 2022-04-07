@@ -13,6 +13,8 @@
 
 "冶炼条件" 对应了输入的json文件的 "CONDITION" 部分
 
+解析json的功能基于button-chen的<a href="https://github.com/button-chen/tinyjson">tinyjson</a>实现的
+
 ### 运行
 
 + 需要支持C++ 11 以上的编译器
