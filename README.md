@@ -32,6 +32,7 @@ g++ ./main.cpp -o ./main
 
 ```c
 // in main.cpp
+
   // 第一张配料单所使用的输入参数
   // string filename("input1.json"); //读取输入文件 -- 第一张
   // vector<string> ores_name = {"sinter", "aust", "pellet"}; // 使用的矿名
