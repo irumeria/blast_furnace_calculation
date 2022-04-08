@@ -578,8 +578,7 @@ struct BF_Info {
     // 风口前碳素燃烧放热
     auto qC_blast =
         9800 * blast["C风口"] -
-        coal.OMEGA *
-            (coalHeatp + (331 + 13440) * coal.CONTENT.Getd("H2O"));
+        coal.OMEGA * (coalHeatp + (331 + 13440) * coal.CONTENT.Getd("H2O"));
     // 热风带入物理热
     auto qBlast = total_heat["热风带入物理热"];
     auto qCoke =
@@ -618,12 +617,6 @@ struct BF_Info {
     // 煤气从高温区带走热
     auto q_Gas = VGas_i * 1.411 * 1000 - qCoke;
 
-    // 焦比
-    auto cokeRate =
-        (10 * condition.hot_metal.Getd("C") + blast["直接还原C"] +
-         blast["C风口"]) /
-        burdens.dust.get_content_volumn("C");
-
     area_heat = {};
     area_heat.insert({"风口前碳素燃烧放热", qC_blast});
     area_heat.insert({"热风带入物理热", qBlast});
@@ -631,10 +624,52 @@ struct BF_Info {
     area_heat.insert({"直接还原耗热", qDirect});
     area_heat.insert({"脱硫耗热", qs});
     area_heat.insert({"煤气从高温区带走热", q_Gas});
-    area_heat.insert({"焦比", cokeRate});
-        for (auto x : area_heat) {
+    for (auto x : area_heat) {
       cout << x.first << ": " << x.second << endl;
     }
+    cout << "\n";
+    return *this;
+  }
+  BF_Info &print_mixed_ore_content() {
+    double mixOmega = {};
+    double mixMoist = {};
+    for (auto ore : burdens.ores) {
+      mixOmega += ore.OMEGA;
+      mixMoist += ore.MOIST;
+    }
+    array<string, 7> element_labels = {"TFe", "Mn", "V", "Nb", "Ti", "P", "S"};
+    array<string, 19> content_labels = {
+        {"Fe2O3", "FeO", "CaO", "SiO2", "MgO", "Al2O3", "MnO", "MnO2", "V2O5",
+         "TiO2", "P2O5", "FeS", "FeS2", "SO3", "(K+Na)2O", "C", "CO2", "H2O",
+         "REST"}};
+    cout << "混合矿成分: " << endl;
+    cout << "总量: " << mixOmega << endl;
+    cout << "配比: " << endl;
+    for (size_t i = 0; i < burdens.ores.size(); i++) {
+      cout << "  " << oresLabel[i] << ": "
+           << 100 * burdens.ores[i].OMEGA / mixOmega << "%" << endl;
+    }
+    cout << "元素占比: " << endl;
+    for (size_t i = 0; i < element_labels.size(); i++) {
+      double _element_ratio = {};
+      for (auto ore : burdens.ores) {
+        _element_ratio +=
+            ore.OMEGA / mixOmega * ore.ELEMENT.Getd(element_labels[i]);
+      }
+      cout << "  " << element_labels[i] << ": " << _element_ratio << "%"
+           << endl;
+    }
+    cout << "成分占比: " << endl;
+    for (size_t i = 0; i < content_labels.size(); i++) {
+      double _content_ratio = {};
+      for (auto ore : burdens.ores) {
+        _content_ratio +=
+            ore.OMEGA / mixOmega * ore.CONTENT.Getd(content_labels[i]);
+      }
+      cout << "  " << content_labels[i] << ": " << _content_ratio << "%"
+           << endl;
+    }
+    cout << "水分: " << mixMoist << endl;
     cout << "\n";
     return *this;
   }

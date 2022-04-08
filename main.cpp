@@ -15,7 +15,7 @@ int main() {
   // 第二张配料单所使用的输入参数
   string filename("./data/input2.json"); //读取输入文件 -- 第二张
   vector<string> ores_name = {"sinter", "aust"}; // 使用的矿名
-  vector<string> equ_elements = {"TFe", "P"};   // 配比计算使用的元素
+  vector<string> equ_elements = {"TFe", "P"};    // 配比计算使用的元素
 
   string file_contents = readFileIntoString(filename);
   tiny::TinyJson root;
@@ -33,5 +33,6 @@ int main() {
       .check_material_balance()       // 检查物料平衡
       .check_rd()                     // 检查直接还原率
       .get_heat_balance()             // 计算第一总热平衡
-      .get_area_heat_balance();       // 计算区域热平衡
+      .get_area_heat_balance()        // 计算区域热平衡
+      .print_mixed_ore_content();     // 输出混合矿成分
 }
