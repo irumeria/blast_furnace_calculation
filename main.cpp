@@ -17,6 +17,13 @@ int main() {
   vector<string> ores_name = {"sinter", "aust"}; // 使用的矿名
   vector<string> equ_elements = {"TFe", "P"};    // 配比计算使用的元素
 
+  // 需要打印的混合矿成分
+  vector<string> element_labels = {"TFe", "Mn", "V", "Nb", "Ti", "P", "S"};
+  vector<string> content_labels = {{"Fe2O3", "FeO", "CaO", "SiO2", "MgO",
+                                    "Al2O3", "MnO", "MnO2", "V2O5", "TiO2",
+                                    "P2O5", "FeS", "FeS2", "SO3", "(K+Na)2O",
+                                    "C", "CO2", "H2O", "REST"}};
+
   string file_contents = readFileIntoString(filename);
   tiny::TinyJson root;
   root.ReadJson(file_contents);
@@ -34,5 +41,6 @@ int main() {
       .check_rd()                     // 检查直接还原率
       .get_heat_balance()             // 计算第一总热平衡
       .get_area_heat_balance()        // 计算区域热平衡
-      .print_mixed_ore_content();     // 输出混合矿成分
+      .print_mixed_ore_content(       // 输出混合矿成分
+          element_labels, content_labels);
 }

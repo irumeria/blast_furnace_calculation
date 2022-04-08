@@ -630,18 +630,14 @@ struct BF_Info {
     cout << "\n";
     return *this;
   }
-  BF_Info &print_mixed_ore_content() {
+  BF_Info &print_mixed_ore_content(vector<string> element_labels, vector<string> content_labels) {
     double mixOmega = {};
     double mixMoist = {};
     for (auto ore : burdens.ores) {
       mixOmega += ore.OMEGA;
       mixMoist += ore.MOIST;
     }
-    array<string, 7> element_labels = {"TFe", "Mn", "V", "Nb", "Ti", "P", "S"};
-    array<string, 19> content_labels = {
-        {"Fe2O3", "FeO", "CaO", "SiO2", "MgO", "Al2O3", "MnO", "MnO2", "V2O5",
-         "TiO2", "P2O5", "FeS", "FeS2", "SO3", "(K+Na)2O", "C", "CO2", "H2O",
-         "REST"}};
+
     cout << "混合矿成分: " << endl;
     cout << "总量: " << mixOmega << endl;
     cout << "配比: " << endl;
