@@ -492,14 +492,20 @@ struct BF_Info {
     // 脱硫耗热
     auto qS = 8300 * slag["S/2"] * 2;
     // 碳酸盐分解耗热
-    auto qCarbonic = // ....? 啥是 CO2XXX
-        (4040 + 0.5 * 3770) * burdens.get_ores_content_volumn("CaO") +
-        2307 * burdens.get_ores_content_volumn("MgO") +
-        1918 * burdens.get_ores_content_volumn("FeO") +
-        2650 * burdens.get_ores_content_volumn("MnO");
+    double qCarbonic = {};
+    for (auto ore : burdens.ores) {
+      if (ore.CONTENT.Getd("CO2") >= 1e-6) {
+        qCarbonic += // ....? 啥是 CO2XXX
+            (4040 + 0.5 * 3770) * ore.get_content_volumn("CaO") +
+            2307 * ore.get_content_volumn("MgO") +
+            1918 * ore.get_content_volumn("FeO") +
+            2650 * ore.get_content_volumn("MnO");
+      }
+    }
+
     // 喷吹燃料分解耗热
     auto qBlow = coal.OMEGA *
-                 (blowHeat + (331 + 13440) * coal.get_content_volumn("H2O"));
+                 (blowHeat + (331 + 13440) * coal.CONTENT.Getd("H2O"));
     // 炉渣带走热量
     auto qSlag_O = slag["total"] * 1780;
     // 废铁升温熔化热
@@ -567,7 +573,7 @@ struct BF_Info {
     for (auto x : total_heat) {
       cout << x.first << ": " << x.second << endl;
     }
-    cout << "热能耗散量: " << 100*qLoss/qIn <<"%"<<endl;
+    cout << "热能耗散量: " << 100 * qLoss / qIn << "%" << endl;
     cout << "\n";
     return *this;
   }
