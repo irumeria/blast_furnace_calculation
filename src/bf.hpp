@@ -131,11 +131,12 @@ struct BF_Info {
       vector<vector<double>> vect_inv =
           vector<vector<double>>(vect.size(), vect[0]);
 
-      // if (condition.org.Get<bool>("RATIO") == true){
-      //   for(auto x:)
-      // }
+      // 取系数矩阵的逆矩阵
       get_M_Inverse(vect, vect_inv);
+
+      //矩阵相乘
       auto ret = mCross(vect_inv, b);
+
       cout << "结果矩阵: " << endl;
       printMatrix(ret, 5);
 
@@ -227,7 +228,9 @@ struct BF_Info {
                  slag_volumn[slag_labels.size() - 1]});
     cout << "\n";
     for (auto x : slag) {
-      cout << x.first << ": " << x.second << endl;
+      cout << x.first << ": " << x.second << "\t"
+           << 100 * x.second / slag_volumn[slag_labels.size() - 1] << "%"
+           << endl;
     }
 
     return *this;
@@ -564,6 +567,7 @@ struct BF_Info {
     for (auto x : total_heat) {
       cout << x.first << ": " << x.second << endl;
     }
+    cout << "热能耗散量: " << 100*qLoss/qIn <<"%"<<endl;
     cout << "\n";
     return *this;
   }
@@ -630,12 +634,15 @@ struct BF_Info {
     cout << "\n";
     return *this;
   }
-  BF_Info &print_mixed_ore_content(vector<string> element_labels, vector<string> content_labels) {
+  BF_Info &print_mixed_ore_content(vector<string> element_labels,
+                                   vector<string> content_labels) {
     double mixOmega = {};
     double mixMoist = {};
     for (auto ore : burdens.ores) {
       mixOmega += ore.OMEGA;
-      mixMoist += ore.MOIST;
+    }
+    for (auto ore : burdens.ores) {
+      mixMoist += ore.MOIST * ore.OMEGA / mixOmega;
     }
 
     cout << "混合矿成分: " << endl;

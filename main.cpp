@@ -7,6 +7,9 @@ using std::string;
 
 int main() {
 
+  cout.precision(5);
+  cout.flags(cout.fixed);
+
   // 第一张配料单所使用的输入参数
   // string filename("./data/input1.json"); //读取输入文件 -- 第一张
   // vector<string> ores_name = {"sinter", "aust", "pellet"}; // 使用的矿名
@@ -19,10 +22,10 @@ int main() {
 
   // 需要打印的混合矿成分
   vector<string> element_labels = {"TFe", "Mn", "V", "Nb", "Ti", "P", "S"};
-  vector<string> content_labels = {{"Fe2O3", "FeO", "CaO", "SiO2", "MgO",
+  vector<string> content_labels = {"Fe2O3", "FeO", "CaO", "SiO2", "MgO",
                                     "Al2O3", "MnO", "MnO2", "V2O5", "TiO2",
                                     "P2O5", "FeS", "FeS2", "SO3", "(K+Na)2O",
-                                    "C", "CO2", "H2O", "REST"}};
+                                    "C", "CO2", "H2O", "REST"};
 
   string file_contents = readFileIntoString(filename);
   tiny::TinyJson root;
